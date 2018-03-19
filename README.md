@@ -1,2 +1,2 @@
 # chef-attributes
-Create, Update or Delete Chef Attributes on Cookbook, Role or Environment Level
+Create, Update or Delete Chef Attributes on Node, Role or Environment Level
