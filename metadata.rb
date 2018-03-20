@@ -14,3 +14,6 @@ supports 'windows'
 depends 'ohai', '>= 4.0.0'
 depends 'rubygems', '~> 1.1.1'
 depends 'build-essential', '~> 8.1.1'
+
+source_url 'https://github.com/ledorsapmalat/chef-attributes' if respond_to?(:source_url)
+issues_url 'https://github.com/ledorsapmalat/chef-attributes' if respond_to?(:issues_url)
