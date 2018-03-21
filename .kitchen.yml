@@ -6,9 +6,9 @@ driver:
 
 provisioner:
   name: chef_solo
-  # You may wish to disable always updating cookbooks in CI or other testing environments.
-  # For example:
-  #   always_update_cookbooks: <%= !ENV['CI'] %>
+  environments_path: test/environments
+  solo_rb:
+    environment: kitchen
   always_update_cookbooks: true
 
 verifier:

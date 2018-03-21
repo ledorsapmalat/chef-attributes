@@ -18,16 +18,17 @@ require 'shellwords'
 resource_name :knife_attribute
 
 # => Define the Resource Properties
-property :name, default: 'kitchen-attribute'
+property :name
 property :level, default: 'node'
 property :level_name, default: nil
 property :attribute, default: nil
 property :value, default: nil
+property :config, default: nil
 
 #
 # => Define the Default Resource Action
 #
-actions :install, :remove, :set
+actions :install, :remove, :set, :unset
 default_action :install
 
 #
@@ -39,7 +40,7 @@ action :install do
       install_gem_dependencies
     end
   end
-  if package_exists?
+  if gem_exists?
     Chef::Log.info "#{new_resource} already set - nothing to do."
   else
     converge_by(" Install Gem #{new_resource}") do
@@ -54,7 +55,7 @@ action :remove do
       install_gem_dependencies
     end
   end
-  if package_exists?
+  if gem_exists?
     converge_by(" Remove Gem #{new_resource} ") do
       delete_knife_attribute
     end
@@ -64,10 +65,17 @@ action :remove do
 end
 
 action :set do
-  action_install
-  if !new_resource.attribute.empty? && !new_resource.value.empty? && !new_resource.level_name.empty?
+  if !new_resource.attribute.nil? && !new_resource.value.nil? && !new_resource.level_name.nil?
     converge_by(" Set Gem #{new_resource}") do
       set_knife_attribute
+    end
+  end
+end
+
+action :unset do
+  if !new_resource.attribute.nil? && !new_resource.level_name.nil?
+    converge_by(" Unset Gem #{new_resource}") do
+      unset_knife_attribute
     end
   end
 end
@@ -77,7 +85,7 @@ action_class do
     ::File.exist?('/root/._gem_dependencies_installed')
   end
 
-  def package_exists?
+  def gem_exists?
     ::File.exist?('/root/._knife_attribute_installed')
   end
 
@@ -107,10 +115,26 @@ action_class do
   end
 
   def set_knife_attribute
-    bash "set_#{new_resource.level}_#{new_resource.attribute}_#{new_resource.value}" do
-      code <<-EOH
-        code "knife #{new_resource.level} attribute set #{new_resource.level_name} #{new_resource.attribute} #{new_resource.value} -t override "
-      EOH
+    if new_resource.config.nil?
+      bash "set_#{new_resource.level}#{new_resource.level_name}_#{new_resource.attribute}_#{new_resource.value}" do
+        code "knife #{new_resource.level} attribute set #{new_resource.level_name} #{new_resource.attribute} #{new_resource.value} -t override"
+      end
+    else
+      bash "set_#{new_resource.level}#{new_resource.level_name}_#{new_resource.attribute}_#{new_resource.value}" do
+        code "knife #{new_resource.level} attribute set #{new_resource.level_name} #{new_resource.attribute} #{new_resource.value} -t override --config #{new_resource.config} "
+      end
+    end
+  end
+
+  def unset_knife_attribute
+    if new_resource.config.nil?
+      bash "unset_#{new_resource.level}#{new_resource.level_name}_#{new_resource.attribute}_#{new_resource.value}" do
+        code "knife #{new_resource.level} attribute delete #{new_resource.level_name} #{new_resource.attribute} "
+      end
+    else
+      bash "unset_#{new_resource.level}#{new_resource.level_name}_#{new_resource.attribute}_#{new_resource.value}" do
+        code "knife #{new_resource.level} attribute delete #{new_resource.level_name} #{new_resource.attribute} #{new_resource.value} --config #{new_resource.config} "
+      end
     end
   end
 
