@@ -27,9 +27,9 @@ describe 'chef-attributes::default' do
   package_checks.each do |platform, versions|
     versions.each do |version|
       context "When all attributes are default, on #{platform} #{version}" do
-        let(:chef_run) {
-          ChefSpec::SoloRunner.new(platform: "#{platform}", version: "#{version}").converge(described_recipe)
-        }
+        let(:chef_run) do
+          ChefSpec::SoloRunner.new(platform: platform.to_s, version: version.to_s).converge(described_recipe)
+        end
 
         it 'converges successfully' do
           expect { chef_run }.to_not raise_error

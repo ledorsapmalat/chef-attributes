@@ -18,7 +18,6 @@ require 'shellwords'
 resource_name :knife_attribute
 
 # => Define the Resource Properties
-property :name
 property :level, default: 'node'
 property :level_name, default: nil
 property :attribute, default: nil
@@ -28,7 +27,6 @@ property :config, default: nil
 #
 # => Define the Default Resource Action
 #
-actions :install, :remove, :set, :unset
 default_action :install
 
 #
@@ -90,8 +88,8 @@ action_class do
   end
 
   def install_knife_attribute
-    gem_package "knife-attribute" do
-      source "http://gems"
+    gem_package 'knife-attribute' do
+      source 'http://gems'
     end
     file '/root/._knife_attribute_installed' do
       owner 'root'
@@ -102,8 +100,8 @@ action_class do
   end
 
   def delete_knife_attribute
-    gem_package "knife-attribute" do
-      source "http://gems"
+    gem_package 'knife-attribute' do
+      source 'http://gems'
       action :purge
     end
     file '/root/._knife_attribute_installed' do

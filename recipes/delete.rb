@@ -1,6 +1,6 @@
 #
 # Cookbook:: chef-attributes
-# attribute:: default
+# Recipe:: delete
 #
 # Copyright (C) 2018,  Rodel Manalo Talampas
 #
@@ -16,17 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-default['chef']['configuration'] = '/etc/chef/user.rb'
-
-# knife-attribute plugin can manipulate chef attributes via knife
-# Install via Gem or Chef Gem - https://github.com/pdf/knife-attribute
-# It can manipulate environment, role and node level attributes
-default['chef']['level']['attributes'] = {
-  # override this attribute
-  # 'environment' => { array of attributes
-  # },
-  # 'role' => { array of attributes
-  # },
-  # 'node' => { array of attributes
-  # }
-}
+knife_attribute 'knife_attribute_remove' do
+  action :remove
+end
