@@ -8,7 +8,7 @@ version '0.1.0'
 chef_version '>= 12.5' if respond_to?(:chef_version)
 
 supports 'centos', '>= 7.2'
-supports 'centos', '>= 16.04'
+supports 'ubuntu', '>= 16.04'
 supports 'windows'
 
 depends 'ohai', '>= 4.0.0'
