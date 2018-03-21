@@ -1,6 +1,9 @@
 # chef-attributes
 Manipulate Chef Attributes on Node, Role or Environment Level on the fly.
 
+[![Gem Version](https://badge.fury.io/rb/kitchen-docker.svg)](http://badge.fury.io/rb/kitchen-docker)
+[![Build Status](https://travis-ci.org/ledorsapmalat/chef-attributes.svg?branch=master)](https://travis-ci.org/ledorsapmalat/chef-attributes)
+
 ## Usage
 Include the default recipe and override the default attributes ```default['chef']['level']['attributes']```
 
